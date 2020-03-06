@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{site_name} - tagcloud</title>
+    <!--加载-->
+    <script src='/assets/nprogress.js'></script>
+    <link rel='stylesheet' href='/assets/nprogress.css'>
+    <!--加载 end-->
+    <link rel="stylesheet" href="/assets/mdui/css/mdui.min.css">
+    <script src="/assets/mdui/js/mdui.min.js"></script>
+    <!--custom-->
+    <link rel="stylesheet" href="/assets/custom.css">
+    <!--highlight-->
+    <link rel="stylesheet" href="/assets/github.min.css">
+    <script src="/assets/highlight.min.js"></script>
+    <script src="/assets/highlightjs-line-numbers.min.js"></script>
+    <script src="/assets/highlightjs-copy-button.min.js"></script>
+    <!--highlight end-->
+    <!-- markdown katex-->
+    <link rel="stylesheet" href="/assets/markdown2.css">
+    <script src="/assets/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+    <script src="/assets/katex.min.js"></script>
+    <script src='/assets/functions.js'></script>
+    <link rel="shortcut icon" href="{blog_icon}">
+</head>
+<div id="nightmode"></div>
+<body class="mdui-appbar-with-toolbar mdui-theme-accent-blue">
+    <div class="mdui-appbar mdui-appbar-fixed mdui-appbar-scroll-hide mdui-appbar-inset mdui-color-white mdui-shadow-1">
+        <div class="mdui-toolbar mdui-color-theme">
+            <a href="javascript:drawer.toggle()" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>
+            <a href="/#" class="mdui-typo-title">{site_name}</a>
+            <div class="mdui-toolbar-spacer"></div>
+            <div class="mdui-row">
+                <a href="/tags/" class="mdui-col mdui-text-color-black">TAGS</a>
+                <a href="/tools/" class="mdui-col mdui-text-color-black">TOOLS</a>
+                <a href="/about/" class="mdui-col mdui-text-color-black">ABOUT</a>
+                <a href="/links/" class="mdui-col mdui-text-color-black">LINKS</a>
+            </div>
+            <button onclick="search_dialog.open();document.getElementById('search_input').focus();"
+                class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></button>
+        </div>
+    </div>
+    <div class="mdui-container">
+        <div class="mdui-card">
+            <div class="mdui-card-content" id="tag_cloud">
+                {tag_cloud}
+                <style>#tag_cloud a{{margin: 5px}}</style>
+            </div>
+        </div>
+        {{%ARTICLES%}}
+        <script>
+            var md_in=document.getElementsByClassName("md_in"),
+                md_out=document.getElementsByClassName("md_out");
+            for(i in md_in)md_out[i].innerHTML=marked(md_in[i].value.replace(/#/g,''));
+        </script>
+    </div>
+    <div class="mdui-bottom-nav"></div>
+</body>
+<!--top-->
+<button class="mdui-fab mdui-fab-mini mdui-ripple mdui-fab-fixed mdui-fab-hide" id="totop" onclick="totop()">
+    <i class="mdui-icon material-icons">keyboard_arrow_up</i>
+</button>
+<!--top end-->
+<div class="mdui-dialog" id="search_dialog">
+    <div class="mdui-dialog-title">Search</div>
+    <div class="mdui-dialog-content">
+        <div class="mdui-textfield">
+            <i class="mdui-icon material-icons">search</i>
+            <input id="search_input" class="mdui-textfield-input" placeholder="搜索" onchange="search()">
+        </div>
+        <div id="search_result" class="mdui-list"></div>
+    </div>
+</div>
+<script src="/assets/search.js"></script>
+{drawer}
+{custom_html}
+</html>

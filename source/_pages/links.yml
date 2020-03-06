@@ -1,0 +1,18 @@
+comment: 1 # 是否开启评论
+
+Friends: # 此栏目标题
+  # 链接
+  - name: ZCmimi # 名称
+    url: http://blog.zcmimi.top # 指向地址
+    avatar: /img/avatar.jpg # 头像
+    content: ZCmimi's blog # 描述
+  # 下面以此类推
+
+Websites: # 此栏目标题
+  - name: ZCmimi # 名称
+    url: http://blog.zcmimi.top # 指向地址
+    avatar: /img/avatar.jpg # 头像
+    content: ZCmimi's blog # 描述
+  # 下面以此类推
+
+# 下面以此类推

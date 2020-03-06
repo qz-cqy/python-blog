@@ -1,0 +1,32 @@
+site_name: blog # 站点名称
+blog_icon: /img/avatar.jpg # 博客图标图片地址
+avatar: /img/avatar.jpg # 博客头像,默认头像地址
+author: <your name> # 默认作者
+theme: beauty # 自带主题两种风格(beauty | clean)
+
+article_address: number # 文章地址(number|pinyin)
+# 若选择pinyin,需要先安装pypinyin
+# pip install pypinyin
+
+# 首页
+page_articles: 10 # 每页文章数
+preview_len: 100 # 每篇文章截取长度
+
+randomimg_type: folder # 随机图片地址类型(folder | list)
+randomimg_list: # 随机图片地址列表
+# - url
+randomimg_path: /img # 随机图片地址文件夹
+randomimg_tot: 20 # 图片总数
+randomimg_suf: webp # 图片后缀
+
+htmlmin: 0 # 是否压缩源代码(1|0)
+# 若填1,请先pip install htmlmin
+
+comment_typ: valine # 目前仅支持valine
+
+# Valine评论(请参考https://valine.js.org/configuration.html)
+valine_appid: <your leancloud appid>
+valine_appkey: <your leancloud appkey>
+valine_placeholder: 说几句嘛qwq # 提示语
+valine_visitor: 1 # 暂时不要修改
+valine_notify: 1 # 是否邮件通知
