@@ -1,13 +1,14 @@
 var search_dialog=new mdui.Dialog('#search_dialog',{overlay: false});
-function search(){
+function search(file){
     var text=document.getElementById("search_input").value.toLowerCase();
     document.getElementById("search_result").innerHTML="";
     var xhr=new XMLHttpRequest();
-    xhr.open('GET','/data.json',true);
+    xhr.open('GET',file,true);
     xhr.onreadystatechange=function(){
-        NProgress.start();
+        document.getElementById('loading-progress').hidden=0;
+        mdui.mutation();
         if(xhr.readyState==4){
-            NProgress.done();
+            document.getElementById('loading-progress').hidden=1;
             data=JSON.parse(this.responseText);
             for(i in data){
                 var f=0;

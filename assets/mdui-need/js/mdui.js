@@ -3,7 +3,7 @@
  * Copyright 2016-2020 zdhxiong
  * Licensed under MIT
  * 
- * Included modules:          snackbar,menu,grid,typo,ripple,drawer,dialog,fab,chip,card,list,subheader,appbar,toolbar,textfield,shadow,material-icons,button,bottom_nav,headroom
+ * Included modules:          progress,panel,tooltip,snackbar,menu,grid,typo,ripple,drawer,dialog,fab,chip,card,list,subheader,appbar,toolbar,textfield,shadow,material-icons,button,bottom_nav,headroom,collapse
  * Included primary colors:   blue
  * Included accent colors:    blue
  * Included color degrees:    50,100,200,300,400,500,600,700,800,900,a100,a200,a400,a700
@@ -3022,6 +3022,267 @@
 
   /**
    * =============================================================================
+   * ************   供 Collapse、 Panel 调用的折叠内容块插件   ************
+   * =============================================================================
+   */
+  var CollapsePrivate = (function () {
+
+    /**
+     * 默认参数
+     */
+    var DEFAULT = {
+      accordion: false,                             // 是否使用手风琴效果
+    };
+
+    /**
+     * 折叠内容块
+     * @param selector
+     * @param opts
+     * @param namespace
+     * @constructor
+     */
+    function Collapse(selector, opts, namespace) {
+      var _this = this;
+
+      // 命名空间
+      _this.ns = namespace;
+
+      // 类名
+      var classpPefix = 'mdui-' + _this.ns + '-item';
+      _this.class_item = classpPefix;
+      _this.class_item_open = classpPefix + '-open';
+      _this.class_header = classpPefix + '-header';
+      _this.class_body = classpPefix + '-body';
+
+      // 折叠面板元素
+      _this.$collapse = $(selector).eq(0);
+      if (!_this.$collapse.length) {
+        return;
+      }
+
+      // 已通过自定义属性实例化过，不再重复实例化
+      var oldInst = _this.$collapse.data('mdui.' + _this.ns);
+      if (oldInst) {
+        return oldInst;
+      }
+
+      _this.options = $.extend({}, DEFAULT, (opts || {}));
+
+      _this.$collapse.on('click', '.' + _this.class_header, function () {
+        var $item = $(this).parent('.' + _this.class_item);
+        if (_this.$collapse.children($item).length) {
+          _this.toggle($item);
+        }
+      });
+
+      // 绑定关闭按钮
+      _this.$collapse.on('click', '[mdui-' + _this.ns + '-item-close]', function () {
+        var $item = $(this).parents('.' + _this.class_item).eq(0);
+        if (_this._isOpen($item)) {
+          _this.close($item);
+        }
+      });
+    }
+
+    /**
+     * 指定 item 是否处于打开状态
+     * @param $item
+     * @returns {boolean}
+     * @private
+     */
+    Collapse.prototype._isOpen = function ($item) {
+      return $item.hasClass(this.class_item_open);
+    };
+
+    /**
+     * 获取指定 item
+     * @param item
+     * @returns {*}
+     * @private
+     */
+    Collapse.prototype._getItem = function (item) {
+      var _this = this;
+
+      if (parseInt(item) === item) {
+        // item 是索引号
+        return _this.$collapse.children('.' + _this.class_item).eq(item);
+      }
+
+      return $(item).eq(0);
+    };
+
+    /**
+     * 动画结束回调
+     * @param inst
+     * @param $content
+     * @param $item
+     */
+    var transitionEnd = function (inst, $content, $item) {
+      if (inst._isOpen($item)) {
+        $content
+          .transition(0)
+          .height('auto')
+          .reflow()
+          .transition('');
+
+        componentEvent('opened', inst.ns, inst, $item[0]);
+      } else {
+        $content.height('');
+
+        componentEvent('closed', inst.ns, inst, $item[0]);
+      }
+    };
+
+    /**
+     * 打开指定面板项
+     * @param item 面板项的索引号或 DOM 元素或 CSS 选择器
+     */
+    Collapse.prototype.open = function (item) {
+      var _this = this;
+      var $item = _this._getItem(item);
+
+      if (_this._isOpen($item)) {
+        return;
+      }
+
+      // 关闭其他项
+      if (_this.options.accordion) {
+        _this.$collapse.children('.' + _this.class_item_open).each(function () {
+          var $tmpItem = $(this);
+
+          if ($tmpItem !== $item) {
+            _this.close($tmpItem);
+          }
+        });
+      }
+
+      var $content = $item.children('.' + _this.class_body);
+
+      $content
+        .height($content[0].scrollHeight)
+        .transitionEnd(function () {
+          transitionEnd(_this, $content, $item);
+        });
+
+      componentEvent('open', _this.ns, _this, $item[0]);
+
+      $item.addClass(_this.class_item_open);
+    };
+
+    /**
+     * 关闭指定项
+     * @param item 面板项的索引号或 DOM 元素或 CSS 选择器
+     */
+    Collapse.prototype.close = function (item) {
+      var _this = this;
+      var $item = _this._getItem(item);
+
+      if (!_this._isOpen($item)) {
+        return;
+      }
+
+      var $content = $item.children('.' + _this.class_body);
+
+      componentEvent('close', _this.ns, _this, $item[0]);
+
+      $item.removeClass(_this.class_item_open);
+
+      $content
+        .transition(0)
+        .height($content[0].scrollHeight)
+        .reflow()
+        .transition('')
+        .height('')
+        .transitionEnd(function () {
+          transitionEnd(_this, $content, $item);
+        });
+    };
+
+    /**
+     * 切换指定项的状态
+     * @param item 面板项的索引号或 DOM 元素或 CSS 选择器或 JQ 对象
+     */
+    Collapse.prototype.toggle = function (item) {
+      var _this = this;
+      var $item = _this._getItem(item);
+
+      if (_this._isOpen($item)) {
+        _this.close($item);
+      } else {
+        _this.open($item);
+      }
+    };
+
+    /**
+     * 打开所有项
+     */
+    Collapse.prototype.openAll = function () {
+      var _this = this;
+
+      _this.$collapse.children('.' + _this.class_item).each(function () {
+        var $tmpItem = $(this);
+
+        if (!_this._isOpen($tmpItem)) {
+          _this.open($tmpItem);
+        }
+      });
+    };
+
+    /**
+     * 关闭所有项
+     */
+    Collapse.prototype.closeAll = function () {
+      var _this = this;
+
+      _this.$collapse.children('.' + _this.class_item).each(function () {
+        var $tmpItem = $(this);
+
+        if (_this._isOpen($tmpItem)) {
+          _this.close($tmpItem);
+        }
+      });
+    };
+
+    return Collapse;
+  })();
+
+  /**
+   * =============================================================================
+   * ************   Collapse 折叠内容块插件   ************
+   * =============================================================================
+   */
+  mdui.Collapse = (function () {
+
+    function Collapse(selector, opts) {
+      return new CollapsePrivate(selector, opts, 'collapse');
+    }
+
+    return Collapse;
+  })();
+
+
+  /**
+   * =============================================================================
+   * ************   Collapse 自定义属性   ************
+   * =============================================================================
+   */
+
+  $(function () {
+    mdui.mutation('[mdui-collapse]', function () {
+      var $target = $(this);
+
+      var inst = $target.data('mdui.collapse');
+      if (!inst) {
+        var options = parseOptions($target.attr('mdui-collapse'));
+        inst = new mdui.Collapse($target, options);
+        $target.data('mdui.collapse', inst);
+      }
+    });
+  });
+
+
+  /**
+   * =============================================================================
    * ************   涟漪   ************
    * =============================================================================
    *
@@ -4828,6 +5089,321 @@
 
   /**
    * =============================================================================
+   * ************   ToolTip 工具提示   ************
+   * =============================================================================
+   */
+
+  mdui.Tooltip = (function () {
+
+    /**
+     * 默认参数
+     */
+    var DEFAULT = {
+      position: 'auto',     // 提示所在位置
+      delay: 0,             // 延迟，单位毫秒
+      content: '',          // 提示文本，允许包含 HTML
+    };
+
+    /**
+     * 是否是桌面设备
+     * @returns {boolean}
+     */
+    var isDesktop = function () {
+      return $window.width() > 1024;
+    };
+
+    /**
+     * 设置 Tooltip 的位置
+     * @param inst
+     */
+    function setPosition(inst) {
+      var marginLeft;
+      var marginTop;
+      var position;
+
+      // 触发的元素
+      var targetProps = inst.$target[0].getBoundingClientRect();
+
+      // 触发的元素和 Tooltip 之间的距离
+      var targetMargin = (isDesktop() ? 14 : 24);
+
+      // Tooltip 的宽度和高度
+      var tooltipWidth = inst.$tooltip[0].offsetWidth;
+      var tooltipHeight = inst.$tooltip[0].offsetHeight;
+
+      // Tooltip 的方向
+      position = inst.options.position;
+
+      // 自动判断位置，加 2px，使 Tooltip 距离窗口边框至少有 2px 的间距
+      if (['bottom', 'top', 'left', 'right'].indexOf(position) === -1) {
+        if (
+          targetProps.top + targetProps.height + targetMargin + tooltipHeight + 2 <
+          $window.height()
+        ) {
+          position = 'bottom';
+        } else if (targetMargin + tooltipHeight + 2 < targetProps.top) {
+          position = 'top';
+        } else if (targetMargin + tooltipWidth + 2 < targetProps.left) {
+          position = 'left';
+        } else if (
+          targetProps.width + targetMargin + tooltipWidth + 2 <
+          $window.width() - targetProps.left
+        ) {
+          position = 'right';
+        } else {
+          position = 'bottom';
+        }
+      }
+
+      // 设置位置
+      switch (position) {
+        case 'bottom':
+          marginLeft = -1 * (tooltipWidth / 2);
+          marginTop = (targetProps.height / 2) + targetMargin;
+          inst.$tooltip.transformOrigin('top center');
+          break;
+        case 'top':
+          marginLeft = -1 * (tooltipWidth / 2);
+          marginTop = -1 * (tooltipHeight + (targetProps.height / 2) + targetMargin);
+          inst.$tooltip.transformOrigin('bottom center');
+          break;
+        case 'left':
+          marginLeft = -1 * (tooltipWidth + (targetProps.width / 2) + targetMargin);
+          marginTop = -1 * (tooltipHeight / 2);
+          inst.$tooltip.transformOrigin('center right');
+          break;
+        case 'right':
+          marginLeft = (targetProps.width / 2) + targetMargin;
+          marginTop = -1 * (tooltipHeight / 2);
+          inst.$tooltip.transformOrigin('center left');
+          break;
+      }
+
+      var targetOffset = inst.$target.offset();
+      inst.$tooltip.css({
+        top: targetOffset.top + (targetProps.height / 2) + 'px',
+        left: targetOffset.left + (targetProps.width / 2) + 'px',
+        'margin-left': marginLeft + 'px',
+        'margin-top': marginTop + 'px',
+      });
+    }
+
+    /**
+     * Tooltip 实例
+     * @param selector
+     * @param opts
+     * @constructor
+     */
+    function Tooltip(selector, opts) {
+      var _this = this;
+
+      _this.$target = $(selector).eq(0);
+      if (!_this.$target.length) {
+        return;
+      }
+
+      // 已通过 data 属性实例化过，不再重复实例化
+      var oldInst = _this.$target.data('mdui.tooltip');
+      if (oldInst) {
+        return oldInst;
+      }
+
+      _this.options = $.extend({}, DEFAULT, (opts || {}));
+      _this.state = 'closed';
+
+      // 创建 Tooltip HTML
+      _this.$tooltip = $(
+        '<div class="mdui-tooltip" id="' + $.guid() + '">' +
+          _this.options.content +
+        '</div>'
+      ).appendTo(document.body);
+
+      // 绑定事件。元素处于 disabled 状态时无法触发鼠标事件，为了统一，把 touch 事件也禁用
+      _this.$target
+        .on('touchstart mouseenter', function (e) {
+          if (this.disabled) {
+            return;
+          }
+
+          if (!TouchHandler.isAllow(e)) {
+            return;
+          }
+
+          TouchHandler.register(e);
+
+          _this.open();
+        })
+        .on('touchend mouseleave', function (e) {
+          if (this.disabled) {
+            return;
+          }
+
+          if (!TouchHandler.isAllow(e)) {
+            return;
+          }
+
+          _this.close();
+        })
+        .on(TouchHandler.unlock, function (e) {
+          if (this.disabled) {
+            return;
+          }
+
+          TouchHandler.register(e);
+        });
+    }
+
+    /**
+     * 动画结束回调
+     * @private
+     */
+    var transitionEnd = function (inst) {
+      if (inst.$tooltip.hasClass('mdui-tooltip-open')) {
+        inst.state = 'opened';
+        componentEvent('opened', 'tooltip', inst, inst.$target);
+      } else {
+        inst.state = 'closed';
+        componentEvent('closed', 'tooltip', inst, inst.$target);
+      }
+    };
+
+    /**
+     * 执行打开 Tooltip
+     * @private
+     */
+    Tooltip.prototype._doOpen = function () {
+      var _this = this;
+
+      _this.state = 'opening';
+      componentEvent('open', 'tooltip', _this, _this.$target);
+
+      _this.$tooltip
+        .addClass('mdui-tooltip-open')
+        .transitionEnd(function () {
+          transitionEnd(_this);
+        });
+    };
+
+    /**
+     * 打开 Tooltip
+     * @param opts 允许每次打开时设置不同的参数
+     */
+    Tooltip.prototype.open = function (opts) {
+      var _this = this;
+
+      if (_this.state === 'opening' || _this.state === 'opened') {
+        return;
+      }
+
+      var oldOpts = $.extend({}, _this.options);
+
+      // 合并 data 属性参数
+      $.extend(_this.options, parseOptions(_this.$target.attr('mdui-tooltip')));
+      if (opts) {
+        $.extend(_this.options, opts);
+      }
+
+      // tooltip 的内容有更新
+      if (oldOpts.content !== _this.options.content) {
+        _this.$tooltip.html(_this.options.content);
+      }
+
+      setPosition(_this);
+
+      if (_this.options.delay) {
+        _this.timeoutId = setTimeout(function () {
+          _this._doOpen();
+        }, _this.options.delay);
+      } else {
+        _this.timeoutId = false;
+        _this._doOpen();
+      }
+    };
+
+    /**
+     * 关闭 Tooltip
+     */
+    Tooltip.prototype.close = function () {
+      var _this = this;
+
+      if (_this.timeoutId) {
+        clearTimeout(_this.timeoutId);
+        _this.timeoutId = false;
+      }
+
+      if (_this.state === 'closing' || _this.state === 'closed') {
+        return;
+      }
+
+      _this.state = 'closing';
+      componentEvent('close', 'tooltip', _this, _this.$target);
+
+      _this.$tooltip
+        .removeClass('mdui-tooltip-open')
+        .transitionEnd(function () {
+          transitionEnd(_this);
+        });
+    };
+
+    /**
+     * 切换 Tooltip 状态
+     */
+    Tooltip.prototype.toggle = function () {
+      var _this = this;
+
+      if (_this.state === 'opening' || _this.state === 'opened') {
+        _this.close();
+      } else if (_this.state === 'closing' || _this.state === 'closed') {
+        _this.open();
+      }
+    };
+
+    /**
+     * 获取 Tooltip 状态
+     * @returns {'opening'|'opened'|'closing'|'closed'}
+     */
+    Tooltip.prototype.getState = function () {
+      return this.state;
+    };
+
+    /**
+     * 销毁 Tooltip
+     */
+    /*Tooltip.prototype.destroy = function () {
+      var _this = this;
+      clearTimeout(_this.timeoutId);
+      $.data(_this.target, 'mdui.tooltip', null);
+      $.remove(_this.tooltip);
+    };*/
+
+    return Tooltip;
+
+  })();
+
+
+  /**
+   * =============================================================================
+   * ************   Tooltip DATA API   ************
+   * =============================================================================
+   */
+
+  $(function () {
+    // mouseenter 不能冒泡，所以这里用 mouseover 代替
+    $document.on('touchstart mouseover', '[mdui-tooltip]', function () {
+      var $this = $(this);
+
+      var inst = $this.data('mdui.tooltip');
+      if (!inst) {
+        var options = parseOptions($this.attr('mdui-tooltip'));
+        inst = new mdui.Tooltip($this, options);
+        $this.data('mdui.tooltip', inst);
+      }
+    });
+  });
+
+
+  /**
+   * =============================================================================
    * ************   Snackbar   ************
    * =============================================================================
    */
@@ -5157,6 +5733,106 @@
     });
 
   })();
+
+
+  /**
+   * =============================================================================
+   * ************   Spinner 圆形进度条   ************
+   * =============================================================================
+   */
+
+  (function () {
+    /**
+     * layer 的 HTML 结构
+     */
+    var layerHTML = function () {
+      var i = arguments.length ? arguments[0] : false;
+
+      return '<div class="mdui-spinner-layer ' + (i ? 'mdui-spinner-layer-' + i : '') + '">' +
+                 '<div class="mdui-spinner-circle-clipper mdui-spinner-left">' +
+               '<div class="mdui-spinner-circle"></div>' +
+               '</div>' +
+               '<div class="mdui-spinner-gap-patch">' +
+                 '<div class="mdui-spinner-circle"></div>' +
+               '</div>' +
+               '<div class="mdui-spinner-circle-clipper mdui-spinner-right">' +
+                 '<div class="mdui-spinner-circle"></div>' +
+               '</div>' +
+             '</div>';
+    };
+
+    /**
+     * 填充 HTML
+     * @param spinner
+     */
+    var fillHTML = function (spinner) {
+      var $spinner = $(spinner);
+      var layer;
+      if ($spinner.hasClass('mdui-spinner-colorful')) {
+        layer = layerHTML('1') + layerHTML('2') + layerHTML('3') + layerHTML('4');
+      } else {
+        layer = layerHTML();
+      }
+
+      $spinner.html(layer);
+    };
+
+    /**
+     * 页面加载完后自动填充 HTML 结构
+     */
+    $(function () {
+      mdui.mutation('.mdui-spinner', function () {
+        fillHTML(this);
+      });
+    });
+
+    /**
+     * 更新圆形进度条
+     */
+    mdui.updateSpinners = function () {
+      $(arguments.length ? arguments[0] : '.mdui-spinner').each(function () {
+        fillHTML(this);
+      });
+    };
+
+  })();
+
+
+  /**
+   * =============================================================================
+   * ************   Expansion panel 可扩展面板   ************
+   * =============================================================================
+   */
+
+  mdui.Panel = (function () {
+
+    function Panel(selector, opts) {
+      return new CollapsePrivate(selector, opts, 'panel');
+    }
+
+    return Panel;
+
+  })();
+
+
+  /**
+   * =============================================================================
+   * ************   Expansion panel 自定义属性   ************
+   * =============================================================================
+   */
+
+  $(function () {
+    mdui.mutation('[mdui-panel]', function () {
+      var $target = $(this);
+
+      var inst = $target.data('mdui.panel');
+      if (!inst) {
+        var options = parseOptions($target.attr('mdui-panel'));
+        inst = new mdui.Panel($target, options);
+        $target.data('mdui.panel', inst);
+      }
+    });
+  });
 
 
   /**

@@ -2,12 +2,12 @@
 title: test 
 date: 2020-03-06 10:17
 author: zcmimi
-avatar: /img/avatar.jpg
 tags: 
  - test
-
+categories:
+ - [test]
 thumbnail: 
-top: 1
+top: 0
 ---
 
 # test

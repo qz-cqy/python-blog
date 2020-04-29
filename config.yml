@@ -1,32 +1,59 @@
-site_name: blog # 站点名称
-blog_icon: /img/avatar.jpg # 博客图标图片地址
-avatar: /img/avatar.jpg # 博客头像,默认头像地址
-author: <your name> # 默认作者
-theme: beauty # 自带主题两种风格(beauty | clean)
+site_name: "your blog name" # 站点名称
+site_domain: "example.com" # 域名
+site_rt: "" # 网站根目录位置
+# 没有特殊情况请填 ""
+# 比如你因为某些特殊原因,没法直接在域名根目录部署网站,位置变成了 example.com/web
+#   那么:
+#   site_domain: example.com
+#   site_rt: "/web"
+#   本地调试时请 site_rt: ""
+
+site_icon: /img/avatar.webp # 博客图标图片地址
+assets_rt: 
+# 如果有cdn提高assets文件夹的加载速度,请填入地址
+# 否则留空
+
+avatar: /img/avatar.webp # 博客头像,默认头像地址
+author: "your name" # 默认作者
+theme: clean # 自带主题两种风格(beauty|clean)
 
 article_address: number # 文章地址(number|pinyin)
-# 若选择pinyin,需要先安装pypinyin
-# pip install pypinyin
+# 若选择pinyin,请先pip install pypinyin
 
 # 首页
-page_articles: 10 # 每页文章数
-preview_len: 100 # 每篇文章截取长度
+page_articles: 10 # 首页每页文章数
+preview_len: 100  # 首页文章预览字数
 
 randomimg_type: folder # 随机图片地址类型(folder | list)
-randomimg_list: # 随机图片地址列表
+randomimg_list:        # 随机图片地址列表
 # - url
-randomimg_path: /img # 随机图片地址文件夹
-randomimg_tot: 20 # 图片总数
-randomimg_suf: webp # 图片后缀
+randomimg_path: /img # 随机图片文件夹地址
+randomimg_tot: 33    # 图片总数
+randomimg_suf: webp  # 图片文件后缀名
 
-htmlmin: 0 # 是否压缩源代码(1|0)
+htmlmin: False # 是否压缩源代码
 # 若填1,请先pip install htmlmin
 
+comment: False # 是否开启评论
 comment_typ: valine # 目前仅支持valine
-
 # Valine评论(请参考https://valine.js.org/configuration.html)
-valine_appid: <your leancloud appid>
-valine_appkey: <your leancloud appkey>
-valine_placeholder: 说几句嘛qwq # 提示语
-valine_visitor: 1 # 暂时不要修改
-valine_notify: 1 # 是否邮件通知
+valine_appid: <your appid>
+valine_appkey: <your appkey>
+valine_placeholder: 来快活啊 # 提示语
+
+pjax: False # 是否默认开启pjax
+
+# 音乐播放器(使用MetingJS)
+music_server: netease  # 服务器
+music_id: 765727960    # 歌单id
+music_order: random    # 随机/顺序
+music_theme: '#f7a4b9' # 颜色
+# 详见https://github.com/metowolf/MetingJS
+
+baidu_push: True # 百度推送
+baidu_push_url: http://data.zz.baidu.com/urls?site=<your site url>&token=<your token> #百度推送接口调用地址
+
+rss: False # 生成rss(/atom.xml)
+           # 请先pip install PyRSS2Gen
+
+repo: git@github.com:zcmimi/blog.git # 部署仓库地址

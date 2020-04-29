@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+{head}
+<div class="mdui-progress" id='loading-progress' style="position: fixed;top:0;z-index: 999999;"><div class="mdui-progress-indeterminate"></div></div>
+<div id="theme_css"></div>
+<body class="mdui-appbar-with-toolbar mdui-theme-accent-blue">
+    {appbar}
+    </div>
+    <div class="mdui-container">
+        <div id='page_typ' hidden>index</div>
+        <div class="mdui-row" style="padding-bottom: 50px;">
+            <div class="mdui-col">
+                <div class="mdui-card">
+                    <div class="mdui-card-content">
+                        <h2>{path}</h2>        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mdui-row-xs-1 mdui-row-sm-2 mdui-row-md-3 mdui-row-lg-4">
+            {categories}
+        </div>
+        {articles}
+        <div class="mdui-row-xs-3 article" {split_hide}>
+            <div class="mdui-col">
+                <a href="{pre}" class="mdui-btn mdui-btn-icon" {pre_ban} id='pre_button'>
+                    <i class="mdui-icon material-icons">arrow_back</i>
+                </a>
+            </div>
+            <div class="mdui-col mdui-text-center">{now}</div>
+            <div class="mdui-col">
+                <a href="{nxt}" class="mdui-btn mdui-btn-icon mdui-float-right" {nxt_ban} id='nxt_button'>
+                    <i class="mdui-icon material-icons">arrow_forward</i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="mdui-bottom-nav"></div>
+</body>
+<!--top-->
+<button class="mdui-fab mdui-fab-mini mdui-ripple mdui-fab-fixed mdui-fab-hide" id="totop" onclick="totop()">
+    <i class="mdui-icon material-icons">keyboard_arrow_up</i>
+</button>
+<!--top end-->
+{search}
+{drawer}
+{pjax}
+{music}
+{custom_html}
+</html>

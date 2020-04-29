@@ -1,0 +1,30 @@
+<div id='musiclist'></div>
+<script>
+function music_on(){{
+    pjax_on(1);
+    var x=document.getElementById('musiclist');
+    x.innerHTML="";
+    mdui.snackbar({{message:'歌单加载中,请稍等2-10s'}});
+    var hl=document.createElement('link');
+    hl.href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css";
+    hl.type='text/css';
+    hl.rel='stylesheet';
+    x.appendChild(hl);
+    hl=document.createElement('script');
+    hl.src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js";
+    x.appendChild(hl);
+    hl=document.createElement('script');
+    hl.src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js";
+    x.appendChild(hl);
+
+    hl=document.createElement('meting-js');
+    hl.setAttribute('id','{music_id}');
+    hl.setAttribute('fixed','true');
+    hl.setAttribute('server','{music_server}');
+    hl.setAttribute('type','playlist');
+    hl.setAttribute('order','{music_order}');
+    hl.setAttribute('theme','{music_theme}');
+    x.appendChild(hl);
+}}
+</script>
+<style>.aplayer,.aplayer-body,.aplayer-pic,.aplayer-button{{z-index: 9999999 !important;}}</style>

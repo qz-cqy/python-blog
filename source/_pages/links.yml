@@ -1,18 +1,43 @@
 comment: 1 # 是否开启评论
 
+info: |
+  <div class="mdui-card">
+    <div class="mdui-card-primary">
+      <div class="mdui-card-primary-title">欢迎互加友链!</div>
+    </div>
+    <div class="mdui-card-content">
+      <p>请在下方评论区留下自己的友链,</p>
+      <p>格式:</p>
+      <ul class="mdui-list mdui-list-dense">
+        <li class="mdui-list-item mdui-ripple">1. 名字或昵称</li>
+        <li class="mdui-list-item mdui-ripple">2. 网址</li>
+        <li class="mdui-list-item mdui-ripple">3. 描述(如何描述您)</li>
+        <li class="mdui-list-item mdui-ripple">4. 卡片颜色(比如 #f7a4b9 )</li>
+      </ul>
+      <p>请顺便为您的网站添加上我的友链qwq</p>
+      <div class="mdui-typo">
+        <blockquote>
+          <li class="mdui-list-item mdui-ripple">昵称: zcmimi</li>
+          <li class="mdui-list-item mdui-ripple">网址: http://blog.zcmimi.top</li>
+          <li class="mdui-list-item mdui-ripple">头像: http://blog.zcmimi.top/img/avatar.webp</li>
+          <li class="mdui-list-item mdui-ripple">描述: 可爱的菜鸡OIer,是archlinuxer</li>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+
 Friends: # 此栏目标题
-  # 链接
-  - name: ZCmimi # 名称
-    url: http://blog.zcmimi.top # 指向地址
-    avatar: /img/avatar.jpg # 头像
-    content: ZCmimi's blog # 描述
+  - name: zcmimi # 名称
+    url: https://blog.zcmimi.top # 指向地址
+    avatar: /img/avatar.webp # 头像
+    content: 可爱的菜鸡OIer,是archlinuxer # 描述
+    background-color: "#ffe9f0"
   # 下面以此类推
 
 Websites: # 此栏目标题
-  - name: ZCmimi # 名称
-    url: http://blog.zcmimi.top # 指向地址
-    avatar: /img/avatar.jpg # 头像
-    content: ZCmimi's blog # 描述
+  - name: zcmimi # 名称
+    url: https://blog.zcmimi.top # 指向地址
+    avatar: /img/avatar.webp # 头像
+    content: 可爱的菜鸡OIer,是archlinuxer # 描述
+    background-color: "#ffe9f0"
   # 下面以此类推
-
-# 下面以此类推

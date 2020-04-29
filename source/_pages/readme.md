@@ -1,141 +1,289 @@
 ---
-title: readme 
-date: 2020-03-06 09:20
+title: readme
+date: 2020-04-29 23:45
 author: zcmimi
-avatar: /img/avatar.jpg
+avatar: /img/avatar
 tags: 
- - readme
+# - ***
 
 thumbnail: 
-top: 2 
+comment: 1
+html:
 ---
 
-## 关于博客
+## 简介
 
-这个博客是我用来记录各种**学习笔记**和**技术分享**的小站
+本博客生成器基于`python`,使用若干`pip`包,兼容`hexo`,`jekyll`等博客生成器
 
-## 博客引擎
+使用`markdown`,支持`LaTeX`
 
-基于Python
+建议先了解下`markdown`和`yaml`等语法
 
-博客的生成引擎是我自己编写的,看得上的话请到github给我star一个吧?
+## 依赖
 
-目前的主题(当然也是默认,也还没有人开发其他主题)是我自己编写的material主题,基于[MDUI](https://mdui.org)
-
-主要功能完成,某些小功能正在开发中
-
-**兼容Hexo,Jekyll等静态网站生成器**,可以从无缝切换
-
-使用markdown.
-
-其中使用[front-matter](#front-matter)记录文章的title,date,tags等信息
-
-## 使用说明
-
-**建议使用前了解一下yaml的语法**
-
-### 依赖
+### 必须
 
 请先安装`python-frontmatter`
-
-建议先将`pip`换为国内源
 
 ```bash
 pip install frontmatter
 ```
 
-### blog.py
+建议先将`pip`换为国内源
 
-核心文件
+### 可选功能
 
-```
-0. 无参数: 渲染博客,生成的文件在web文件夹中   
-1. [s or server] + [port(端口号,默认8000)]: 在localhost上预览生成的文件   
-2. [n or new] + [title]: 新建文章   
-3. [cp or createpage] + [title]: 新建页面
-```
-### 配置
+1. `htmlmin`
 
-配置文件`config.yml`
+   用于压缩网页源代码
 
-使用yaml语法
+2. `pypinyin`
+
+   用于生成博文的拼音地址
+
+3. `PyRSS2Gen`
+
+   用于生成博客的`rss`
+
+## 配置文件
+
+`config.yml`
 
 ```yaml
-site_name: <your blog name> # 站点名称
-blog_icon: <blog icon url> # 博客图标图片地址
-avatar: <your avatar url> # 博客头像,默认头像地址
-author: <your name> # 默认作者
-theme: beauty # 自带主题两种风格(beauty | clean)
+site_name: "your blog name" # 站点名称
+site_domain: "example.com" # 域名
+site_rt: "" # 网站根目录位置
+# 没有特殊情况请填 ""
+# 比如你因为某些特殊原因,没法直接在域名根目录部署网站,位置变成了 example.com/web
+#   那么:
+#   site_domain: example.com
+#   site_rt: "/web"
+#   本地调试时请 site_rt: ""
 
-article_address: pinyin # 文章地址(number|pinyin)
-# 若选择pinyin,需要先安装pypinyin
-# pip install pypinyin
+site_icon: /img/avatar.webp # 博客图标图片地址
+assets_rt: 
+# 如果有cdn提高assets文件夹的加载速度,请填入地址
+# 否则留空
+
+avatar: /img/avatar.webp # 博客头像,默认头像地址
+author: "your name" # 默认作者
+theme: clean # 自带主题两种风格(beauty|clean)
+
+article_address: number # 文章地址(number|pinyin)
+# 若选择pinyin,请先pip install pypinyin
 
 # 首页
-page_articles: 10 # 每页文章数
-preview_len: 100 # 每篇文章截取长度
+page_articles: 10 # 首页每页文章数
+preview_len: 100  # 首页文章预览字数
 
 randomimg_type: folder # 随机图片地址类型(folder | list)
-randomimg_list: # 随机图片地址列表
+randomimg_list:        # 随机图片地址列表
 # - url
-randomimg_path: /img # 随机图片地址文件夹
-randomimg_tot: 20 # 图片总数
-randomimg_suf: webp # 图片后缀
+randomimg_path: /img # 随机图片文件夹地址
+randomimg_tot: 33    # 图片总数
+randomimg_suf: webp  # 图片文件后缀名
 
-htmlmin: 0 # 是否压缩源代码(1|0)
+htmlmin: False # 是否压缩源代码
 # 若填1,请先pip install htmlmin
 
+comment: False # 是否开启评论
 comment_typ: valine # 目前仅支持valine
-
 # Valine评论(请参考https://valine.js.org/configuration.html)
-valine_appid: <your leancloud appid>
-valine_appkey: <your leancloud appkey>
-valine_placeholder: 说几句嘛qwq # 提示语
-valine_visitor: 1 # 访问量
-valine_notify: 1 # 是否邮件通知
+valine_appid: <your appid>
+valine_appkey: <your appkey>
+valine_placeholder: 来快活啊 # 提示语
 
+pjax: False # 是否默认开启pjax
+
+# 音乐播放器(使用MetingJS)
+music_server: netease  # 服务器
+music_id: 765727960    # 歌单id
+music_order: random    # 随机/顺序
+music_theme: '#f7a4b9' # 颜色
+# 详见https://github.com/metowolf/MetingJS
+
+baidu_push: True # 百度推送
+baidu_push_url: http://data.zz.baidu.com/urls?site=<your site url>&token=<your token> #百度推送接口调用地址
+
+rss: False # 生成rss(/atom.xml)
+           # 请先pip install PyRSS2Gen
+
+repo: git@github.com:zcmimi/blog.git # 部署仓库地址
 ```
 
-### source
 
-`_posts`文件夹存放文章的markdown
 
-`_pages`文件夹存放页面的markdown或配置文件
+## 开始写作
 
-其他文件夹会被复制到`web`文件夹(即网站)的根目录,如可以防止存放图片的`img`文件夹
+### 新建文章: 
+
+`python blog.py n/new xxxx`
+
+将会在`source/_posts`文件夹创建`xxxx.md`
+
+### 新建页面
+
+`python blog.py np/newpage xxxx`
+
+将会在`source/_pages`文件夹创建`xxxx.md`
+
+### 预览
+
+`python blog.py d/deploy`
+
+---
 
 ### front-matter
 
-使用yaml语法
-
-Front-matter 是文件最上方以 --- 分隔的区域，用于指定个别文件的变量，举例来说：
+使用`front-matter`记录文章信息
 
 ```yaml
 ---
-title: readme          # 文章标题              不填为文章的文件名
-date: 2020-03-06 09:20 # 文章建立日期          不填为文章的文件修改日期
-author: zcmimi         # 作者                 不填为默认作者
-avatar:                # 头像                 不填为默认头像
-tags:                  # 标签
-  - 技术
-  - readme
-thumbnail: /img/0.webp # 自定义缩略图地址       不填为config中的随机图片
-top: 1                 # 置顶优先级(越大越高)   不填为0
-comment: 1             # 是否开启评论          不填为1
+title: {title} # 文章标题
+date:  {date}  # 创建日期
+author:        # 文章作者
+               # (不填默认为配置文件中的作者)
+               
+avatar:        # 文章作者头像
+               # (不填默认为配置文件中的头像)
+               
+tags:          # 文章标签
+# - ***
+
+categories:    # 文章所属分类
+# - [***,***]
+
+thumbnail:     # 文章缩略图
+top: 0         # 首页置顶优先级
+               # 0为关闭置顶
+               # >0,越大优先级越高
+               
+comment: 1     # 开启/关闭评论
+html:          # 在文章前加入html代码
 ---
+
+你的文章
 ```
+
+注意,分类使用方法:
+
+```yaml
+categories:
+- [Diary, PlayStation]
+- [Diary, Games]
+- [Life]
+```
+
+此时这篇文章同时包括三个分类： `PlayStation` 和 `Games` 分别都是父分类 `Diary` 的子分类，同时 `Life` 是一个没有子分类的分类。
+
+### 内容
+
+使用`markdown`+`latex`
+
+行内公式: `$...$`,$E=mc^2$
+
+行外公式: `$$...$$`
+$$
+E=mc^2
+$$
+
+### 文章页面
+
+生成的文件在`/posts/xxx`
+
+支持标签和分类
+
+如需在文章中引用图片或文件,请在`source/posts/`文件夹中新建一个以该篇文章标题命名的文件夹,放入文件即可直接引用,如`![233.png]`
+
+### 其他页面
+
+生成的文件在`/xxx`
+
+支持标签,不支持分类,不会在首页显示
+
+请不要新建叫做`links`的页面,会被友链页面覆盖
+
+## 资源文件夹
+
+在`source`文件夹中,除了`_posts`和`_pages`两个文件夹,其他文件夹会被复制到生成的文件夹的根目录
+
+比如新建`source/img/`,就会被博客根目录,可以通过`/img/`访问
+
+## 部署
+
+首先渲染博客,`python blog.py`生成的博客文件在`web`文件夹中
+
+`python blog.py s/server`可以预览生成的文件
+
+您将它可以上传到您喜欢的地方
+
+推荐部署到: 
+
+1. `github pages`
+
+2. `coding pages`
+
+3. `netlify`
+
+4. 腾讯云`cos`
+
+5. `gitlab pages`
+
+6. 用`rsync`或其他工具推送到您的服务器
+
+---
+
+目前支持`git`的方式部署,如部署到`github pages`(推荐)
+
+请先填好`config.yml`中的`repo`
+
+运行`python blog.py d`以部署博客
+
+---
+
+其他方式请自行上传`web`文件夹
+
+## 自定义
+
+### 自定义顶部应用栏
+
+请修改`layout/appbar.html`
 
 ### 自定义侧边栏
 
-请修改`layout/drawer_mb.html`
+请编辑`source/drawer.yml`
+
+如果你不满意自带的模板,请删除`source/drawer.yml`,
+
+新建`source/drawer.html`,自行编辑
 
 ### 自定义友情链接
 
 修改`source/_pages/links.yml`
 
-使用yaml语法
+使用`yaml`语法
 
-请参考注释
+以我的友链为例子: 
+
+```yaml
+comment: 1 # 是否开启评论
+info: # 添加友链部分下方的html代码
+Friends: # 此栏目标题
+  - name: zcmimi                 # 名称
+    url: https://blog.zcmimi.top # 指向地址
+    avatar: /img/avatar.webp     # 头像
+    content: 一只可爱的菜鸡        # 描述
+    background-color: "#ffe9f0"  # 卡片背景颜色
+  # 下面以此类推
+
+Websites: # 此栏目标题
+  - name: Luogu
+    url: https://www.luogu.com.cn
+    avatar: /assets/icon/luogu.png
+    content: 计算机科学教育新生态
+    background-color: "#89aaff"
+# 以此类推
+```
 
 ### 添加自定义代码
 
@@ -147,21 +295,3 @@ comment: 1             # 是否开启评论          不填为1
    
    修改`layout/custom.html`,这部分代码会添加到源代码末尾(`</html>`的前面)
 
-
-## 部署
-
-生成的所有文件都放在`web`文件夹中，您可以将它们复制到您喜欢的地方。
-
-推荐部署到: 
-
-1. github pages
-   
-2. coding pages
-   
-3. netlify
-   
-4. 腾讯云cos
-   
-5. gitlab pages
-   
-6. 用rsync或其他工具推送到您的服务器

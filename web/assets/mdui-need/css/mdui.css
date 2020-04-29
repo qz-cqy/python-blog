@@ -3,7 +3,7 @@
  * Copyright 2016-2020 zdhxiong
  * Licensed under MIT
  * 
- * Included modules:          snackbar,menu,grid,typo,ripple,drawer,dialog,fab,chip,card,list,subheader,appbar,toolbar,textfield,shadow,material-icons,button,bottom_nav,headroom
+ * Included modules:          progress,panel,tooltip,snackbar,menu,grid,typo,ripple,drawer,dialog,fab,chip,card,list,subheader,appbar,toolbar,textfield,shadow,material-icons,button,bottom_nav,headroom,collapse
  * Included primary colors:   blue
  * Included accent colors:    blue
  * Included color degrees:    50,100,200,300,400,500,600,700,800,900,a100,a200,a400,a700
@@ -1727,6 +1727,45 @@ body.mdui-locked {
     -webkit-transform: translate3d(0, -48px, 0) !important;
             transform: translate3d(0, -48px, 0) !important;
   }
+}
+/**
+ * =============================================================================
+ * ************   Collapse 折叠插件   ************
+ * =============================================================================
+ */
+.mdui-collapse-item-header .mdui-collapse-item-arrow,
+.mdui-collapse-item-header.mdui-collapse-item-arrow {
+  -webkit-transition: -webkit-transform .3s cubic-bezier(.4, 0, .2, 1);
+          transition: -webkit-transform .3s cubic-bezier(.4, 0, .2, 1);
+          transition:         transform .3s cubic-bezier(.4, 0, .2, 1);
+          transition:         transform .3s cubic-bezier(.4, 0, .2, 1), -webkit-transform .3s cubic-bezier(.4, 0, .2, 1);
+  -webkit-transform: rotate(0);
+          transform: rotate(0);
+
+  will-change: transform;
+}
+.mdui-collapse-item-body {
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+  -webkit-transition: all .3s cubic-bezier(.4, 0, .2, 1);
+          transition: all .3s cubic-bezier(.4, 0, .2, 1);
+
+  will-change: height;
+}
+.mdui-collapse-item-body .mdui-list-item {
+  padding-left: 72px;
+}
+.mdui-collapse-item-open > .mdui-collapse-item-header .mdui-collapse-item-arrow,
+.mdui-collapse-item-open > .mdui-collapse-item-header.mdui-collapse-item-arrow {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+.mdui-collapse-item-open > .mdui-collapse-item-body {
+  height: auto;
 }
 /**
  * =============================================================================
@@ -4446,6 +4485,56 @@ body.mdui-loaded .mdui-drawer {
 }
 /**
  * =============================================================================
+ * ************   Tooltip 工具提示   ************
+ * =============================================================================
+ */
+.mdui-tooltip {
+  position: absolute;
+  z-index: 9000;
+  display: inline-block;
+  max-width: 180px;
+  min-height: 32px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 22px;
+  color: #fff;
+  text-align: left;
+  background-color: rgba(97, 97, 97, .9);
+  border-radius: 2px;
+  opacity: 0;
+  -webkit-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+          transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+  -webkit-transition-duration: .15s;
+          transition-duration: .15s;
+  -webkit-transition-property: opacity, -webkit-transform;
+          transition-property: opacity, -webkit-transform;
+          transition-property: opacity, transform;
+          transition-property: opacity, transform, -webkit-transform;
+  -webkit-transform: scale(0);
+          transform: scale(0);
+
+  will-change: opacity, transform;
+}
+@media (min-width: 1024px) {
+  .mdui-tooltip {
+    max-width: 200px;
+    min-height: 24px;
+    padding: 4px 8px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+/* 显示工具提示 */
+.mdui-tooltip-open {
+  opacity: 1;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+}
+/**
+ * =============================================================================
  * ************   Snackbar   ************
  * =============================================================================
  */
@@ -4819,6 +4908,734 @@ body.mdui-loaded .mdui-drawer {
 /* 带背景色的底部导航栏 */
 .mdui-bottom-nav[class*="mdui-color-"] .mdui-bottom-nav-active {
   color: inherit !important;
+}
+/**
+ * =============================================================================
+ * ************   Progress Linear 线性进度条   ************
+ * =============================================================================
+ */
+/* 线性进度条 */
+.mdui-progress {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  background-color: rgba(63, 81, 181, .2);
+  border-radius: 2px;
+}
+/* 确定进度的线性进度条 */
+.mdui-progress-determinate {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #3f51b5;
+  -webkit-transition: width .3s linear;
+          transition: width .3s linear;
+}
+/* 不确定进度的线性进度条 */
+.mdui-progress-indeterminate {
+  background-color: #3f51b5;
+}
+.mdui-progress-indeterminate:before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  content: ' ';
+  background-color: inherit;
+  -webkit-animation: mdui-progress-indeterminate 2s linear infinite;
+          animation: mdui-progress-indeterminate 2s linear infinite;
+
+  will-change: left, width;
+}
+.mdui-progress-indeterminate:after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  content: ' ';
+  background-color: inherit;
+  -webkit-animation: mdui-progress-indeterminate-short 2s linear infinite;
+          animation: mdui-progress-indeterminate-short 2s linear infinite;
+
+  will-change: left, width;
+}
+@-webkit-keyframes mdui-progress-indeterminate {
+  0% {
+    left: 0;
+    width: 0;
+  }
+  50% {
+    left: 30%;
+    width: 70%;
+  }
+  75% {
+    left: 100%;
+    width: 0;
+  }
+}
+@keyframes mdui-progress-indeterminate {
+  0% {
+    left: 0;
+    width: 0;
+  }
+  50% {
+    left: 30%;
+    width: 70%;
+  }
+  75% {
+    left: 100%;
+    width: 0;
+  }
+}
+@-webkit-keyframes mdui-progress-indeterminate-short {
+  0% {
+    left: 0;
+    width: 0;
+  }
+  50% {
+    left: 0;
+    width: 0;
+  }
+  75% {
+    left: 0;
+    width: 25%;
+  }
+  100% {
+    left: 100%;
+    width: 0;
+  }
+}
+@keyframes mdui-progress-indeterminate-short {
+  0% {
+    left: 0;
+    width: 0;
+  }
+  50% {
+    left: 0;
+    width: 0;
+  }
+  75% {
+    left: 0;
+    width: 25%;
+  }
+  100% {
+    left: 100%;
+    width: 0;
+  }
+}
+/**
+ * =============================================================================
+ * ************   Progress linear 主色   ************
+ * =============================================================================
+ */
+.mdui-theme-primary-blue .mdui-progress {
+  background-color: rgba(33, 150, 243, .2);
+}
+.mdui-theme-primary-blue .mdui-progress-determinate,
+.mdui-theme-primary-blue .mdui-progress-indeterminate {
+  background-color: #2196f3;
+}
+/**
+ * =============================================================================
+ * ************   Progress Circular 圆形进度条   ************
+ * =============================================================================
+ */
+.mdui-spinner {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  -webkit-animation: mdui-spinner 1568ms linear infinite;
+          animation: mdui-spinner 1568ms linear infinite;
+}
+@-webkit-keyframes mdui-spinner {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+@keyframes mdui-spinner {
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+.mdui-spinner-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-color: #3f51b5;
+  opacity: 0;
+  opacity: 1;
+  -webkit-animation: mdui-spinner-layer-fill-unfill-rotate 5332ms cubic-bezier(.4, 0, .2, 1) infinite both;
+          animation: mdui-spinner-layer-fill-unfill-rotate 5332ms cubic-bezier(.4, 0, .2, 1) infinite both;
+}
+.mdui-spinner-layer-1 {
+  border-color: #42a5f5 !important;
+  -webkit-animation: mdui-spinner-layer-fill-unfill-rotate 5332ms cubic-bezier(.4, 0, .2, 1) infinite both, mdui-spinner-layer-1-fade-in-out 5332ms cubic-bezier(.4, 0, .2, 1) infinite both;
+          animation: mdui-spinner-layer-fill-unfill-rotate 5332ms cubic-bezier(.4, 0, .2, 1) infinite both, mdui-spinner-layer-1-fade-in-out 5332ms cubic-bezier(.4, 0, .2, 1) infinite both;
+}
+.mdui-spinner-layer-2 {
+  border-color: #f44336 !important;
+  -webkit-animation: mdui-spinner-layer-fill-unfill-rotate 5332ms cubic-bezier(.4, 0, .2, 1) infinite both, mdui-spinner-layer-2-fade-in-out 5332ms cubic-bezier(.4, 0, .2, 1) infinite both;
+          animation: mdui-spinner-layer-fill-unfill-rotate 5332ms cubic-bezier(.4, 0, .2, 1) infinite both, mdui-spinner-layer-2-fade-in-out 5332ms cubic-bezier(.4, 0, .2, 1) infinite both;
+}
+.mdui-spinner-layer-3 {
+  border-color: #fdd835 !important;
+  -webkit-animation: mdui-spinner-layer-fill-unfill-rotate 5332ms cubic-bezier(.4, 0, .2, 1) infinite both, mdui-spinner-layer-3-fade-in-out 5332ms cubic-bezier(.4, 0, .2, 1) infinite both;
+          animation: mdui-spinner-layer-fill-unfill-rotate 5332ms cubic-bezier(.4, 0, .2, 1) infinite both, mdui-spinner-layer-3-fade-in-out 5332ms cubic-bezier(.4, 0, .2, 1) infinite both;
+}
+.mdui-spinner-layer-4 {
+  border-color: #4caf50 !important;
+  -webkit-animation: mdui-spinner-layer-fill-unfill-rotate 5332ms cubic-bezier(.4, 0, .2, 1) infinite both, mdui-spinner-layer-4-fade-in-out 5332ms cubic-bezier(.4, 0, .2, 1) infinite both;
+          animation: mdui-spinner-layer-fill-unfill-rotate 5332ms cubic-bezier(.4, 0, .2, 1) infinite both, mdui-spinner-layer-4-fade-in-out 5332ms cubic-bezier(.4, 0, .2, 1) infinite both;
+}
+@-webkit-keyframes mdui-spinner-layer-fill-unfill-rotate {
+  12.5% {
+    -webkit-transform: rotate(135deg);
+            transform: rotate(135deg);
+  }
+  25% {
+    -webkit-transform: rotate(270deg);
+            transform: rotate(270deg);
+  }
+  37.5% {
+    -webkit-transform: rotate(405deg);
+            transform: rotate(405deg);
+  }
+  50% {
+    -webkit-transform: rotate(540deg);
+            transform: rotate(540deg);
+  }
+  62.5% {
+    -webkit-transform: rotate(675deg);
+            transform: rotate(675deg);
+  }
+  75% {
+    -webkit-transform: rotate(810deg);
+            transform: rotate(810deg);
+  }
+  87.5% {
+    -webkit-transform: rotate(945deg);
+            transform: rotate(945deg);
+  }
+  to {
+    -webkit-transform: rotate(1080deg);
+            transform: rotate(1080deg);
+  }
+}
+@keyframes mdui-spinner-layer-fill-unfill-rotate {
+  12.5% {
+    -webkit-transform: rotate(135deg);
+            transform: rotate(135deg);
+  }
+  25% {
+    -webkit-transform: rotate(270deg);
+            transform: rotate(270deg);
+  }
+  37.5% {
+    -webkit-transform: rotate(405deg);
+            transform: rotate(405deg);
+  }
+  50% {
+    -webkit-transform: rotate(540deg);
+            transform: rotate(540deg);
+  }
+  62.5% {
+    -webkit-transform: rotate(675deg);
+            transform: rotate(675deg);
+  }
+  75% {
+    -webkit-transform: rotate(810deg);
+            transform: rotate(810deg);
+  }
+  87.5% {
+    -webkit-transform: rotate(945deg);
+            transform: rotate(945deg);
+  }
+  to {
+    -webkit-transform: rotate(1080deg);
+            transform: rotate(1080deg);
+  }
+}
+@-webkit-keyframes mdui-spinner-layer-1-fade-in-out {
+  from {
+    opacity: 1;
+  }
+  25% {
+    opacity: 1;
+  }
+  26% {
+    opacity: 0;
+  }
+  89% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes mdui-spinner-layer-1-fade-in-out {
+  from {
+    opacity: 1;
+  }
+  25% {
+    opacity: 1;
+  }
+  26% {
+    opacity: 0;
+  }
+  89% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes mdui-spinner-layer-2-fade-in-out {
+  from {
+    opacity: 0;
+  }
+  15% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  51% {
+    opacity: 0;
+  }
+}
+@keyframes mdui-spinner-layer-2-fade-in-out {
+  from {
+    opacity: 0;
+  }
+  15% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  51% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes mdui-spinner-layer-3-fade-in-out {
+  from {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  76% {
+    opacity: 0;
+  }
+}
+@keyframes mdui-spinner-layer-3-fade-in-out {
+  from {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  76% {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes mdui-spinner-layer-4-fade-in-out {
+  from {
+    opacity: 0;
+  }
+  65% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes mdui-spinner-layer-4-fade-in-out {
+  from {
+    opacity: 0;
+  }
+  65% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.mdui-spinner-gap-patch {
+  position: absolute;
+  top: 0;
+  left: 45%;
+  width: 10%;
+  height: 100%;
+  overflow: hidden;
+  border-color: inherit;
+}
+.mdui-spinner-gap-patch .mdui-spinner-circle {
+  left: -450%;
+  width: 1000%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.mdui-spinner-circle-clipper {
+  position: relative;
+  display: inline-block;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  border-color: inherit;
+}
+.mdui-spinner-circle-clipper .mdui-spinner-circle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 200%;
+  height: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-color: inherit;
+  border-style: solid;
+  border-width: 3px;
+  border-bottom-color: transparent !important;
+  border-radius: 50%;
+  -webkit-animation: none;
+          animation: none;
+}
+.mdui-spinner-circle-clipper.mdui-spinner-left {
+  float: left;
+}
+.mdui-spinner-circle-clipper.mdui-spinner-left .mdui-spinner-circle {
+  left: 0;
+  border-right-color: transparent !important;
+  -webkit-transform: rotate(129deg);
+          transform: rotate(129deg);
+  -webkit-animation: mdui-spinner-left-spin 1333ms cubic-bezier(.4, 0, .2, 1) infinite both;
+          animation: mdui-spinner-left-spin 1333ms cubic-bezier(.4, 0, .2, 1) infinite both;
+}
+.mdui-spinner-circle-clipper.mdui-spinner-right {
+  float: right;
+}
+.mdui-spinner-circle-clipper.mdui-spinner-right .mdui-spinner-circle {
+  left: -100%;
+  border-left-color: transparent !important;
+  -webkit-transform: rotate(-129deg);
+          transform: rotate(-129deg);
+  -webkit-animation: mdui-spinner-right-spin 1333ms cubic-bezier(.4, 0, .2, 1) infinite both;
+          animation: mdui-spinner-right-spin 1333ms cubic-bezier(.4, 0, .2, 1) infinite both;
+}
+@-webkit-keyframes mdui-spinner-left-spin {
+  from {
+    -webkit-transform: rotate(130deg);
+            transform: rotate(130deg);
+  }
+  50% {
+    -webkit-transform: rotate(-5deg);
+            transform: rotate(-5deg);
+  }
+  to {
+    -webkit-transform: rotate(130deg);
+            transform: rotate(130deg);
+  }
+}
+@keyframes mdui-spinner-left-spin {
+  from {
+    -webkit-transform: rotate(130deg);
+            transform: rotate(130deg);
+  }
+  50% {
+    -webkit-transform: rotate(-5deg);
+            transform: rotate(-5deg);
+  }
+  to {
+    -webkit-transform: rotate(130deg);
+            transform: rotate(130deg);
+  }
+}
+@-webkit-keyframes mdui-spinner-right-spin {
+  from {
+    -webkit-transform: rotate(-130deg);
+            transform: rotate(-130deg);
+  }
+  50% {
+    -webkit-transform: rotate(5deg);
+            transform: rotate(5deg);
+  }
+  to {
+    -webkit-transform: rotate(-130deg);
+            transform: rotate(-130deg);
+  }
+}
+@keyframes mdui-spinner-right-spin {
+  from {
+    -webkit-transform: rotate(-130deg);
+            transform: rotate(-130deg);
+  }
+  50% {
+    -webkit-transform: rotate(5deg);
+            transform: rotate(5deg);
+  }
+  to {
+    -webkit-transform: rotate(-130deg);
+            transform: rotate(-130deg);
+  }
+}
+/**
+ * =============================================================================
+ * ************   Spinner linear 主色   ************
+ * =============================================================================
+ */
+.mdui-theme-primary-blue .mdui-spinner-layer {
+  border-color: #2196f3;
+}
+/**
+ * =============================================================================
+ * ************   Expansion panel 可扩展面板   ************
+ * =============================================================================
+ */
+/* 可扩展面板 */
+.mdui-panel {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+/* 面板项 */
+.mdui-panel-item {
+  color: rgba(0, 0, 0, .87);
+  background-color: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, .12);
+  -webkit-box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+          box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+  -webkit-transition: margin .3s cubic-bezier(.4, 0, .2, 1);
+          transition: margin .3s cubic-bezier(.4, 0, .2, 1);
+
+  will-change: margin;
+}
+.mdui-panel-item:last-child {
+  border-bottom: none;
+}
+/* 面板头部 */
+.mdui-panel-item-header {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+  width: 100%;
+  height: 48px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0 24px;
+  overflow: hidden;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-transition: all .3s cubic-bezier(.4, 0, .2, 1);
+          transition: all .3s cubic-bezier(.4, 0, .2, 1);
+
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+          align-items: center;
+  will-change: height, background-color;
+}
+.mdui-panel-item-header:active {
+  background-color: #eee;
+}
+/* 面板项标题 */
+.mdui-panel-item-title {
+  width: 36%;
+  min-width: 36%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding-right: 16px;
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 面板项内容 */
+.mdui-panel-item-summary {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding-right: 16px;
+  overflow: hidden;
+  color: rgba(0, 0, 0, .54);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+/* 展开收起的图标 */
+.mdui-panel-item-arrow {
+  position: absolute;
+  top: 12px;
+  right: 24px;
+  color: rgba(0, 0, 0, .54);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-transition: all .3s cubic-bezier(.4, 0, .2, 1);
+          transition: all .3s cubic-bezier(.4, 0, .2, 1);
+  -webkit-transform: rotate(0);
+          transform: rotate(0);
+
+  will-change: transform, top;
+}
+.mdui-panel-item-summary + .mdui-panel-item-arrow {
+  position: relative;
+  top: 0 !important;
+  right: 0;
+}
+/* 面板项内容 */
+.mdui-panel-item-body {
+  height: 0;
+  padding: 0 24px;
+  overflow: hidden;
+  -webkit-transition: height .3s cubic-bezier(.4, 0, .2, 1);
+          transition: height .3s cubic-bezier(.4, 0, .2, 1);
+
+  will-change: height;
+}
+.mdui-panel-item-body:before,
+.mdui-panel-item-body:after {
+  display: table;
+  content: " ";
+}
+.mdui-panel-item-body:after {
+  clear: both;
+}
+.mdui-panel-item-body:before,
+.mdui-panel-item-body:after {
+  display: table;
+  content: " ";
+}
+.mdui-panel-item-body:after {
+  clear: both;
+}
+.mdui-panel-item-body:after {
+  height: 16px;
+}
+/* 面板项操作栏 */
+.mdui-panel-item-actions {
+  display: block;
+  width: 100%;
+  padding: 16px 24px 0 24px;
+  margin: 16px -24px 0 -24px;
+  text-align: right;
+  border-top: 1px solid rgba(0, 0, 0, .12);
+}
+.mdui-panel-item-actions .mdui-btn {
+  margin-left: 8px;
+}
+.mdui-panel-item-actions .mdui-btn:first-child {
+  margin-left: 0;
+}
+/* 使打开项上下没有边距 */
+.mdui-panel-gapless {
+  -webkit-box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+          box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+}
+.mdui-panel-gapless .mdui-panel-item {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.mdui-panel-gapless .mdui-panel-item-open {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+/* 弹出面板 */
+.mdui-panel-popout .mdui-panel-item-open {
+  margin-right: -16px;
+  margin-left: -16px;
+}
+/* 打开状态的面板项 */
+.mdui-panel-item-open {
+  height: auto;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+.mdui-panel-item-open > .mdui-panel-item-header {
+  height: 64px;
+}
+.mdui-panel-item-open > .mdui-panel-item-header .mdui-panel-item-arrow {
+  top: 20px;
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+.mdui-panel-item-open > .mdui-panel-item-body {
+  height: auto;
+}
+/**
+ * =============================================================================
+ * ************   Expansion panel dark   ************
+ * =============================================================================
+ */
+.mdui-theme-layout-dark .mdui-panel-item {
+  color: #fff;
+  background-color: #303030;
+  border-bottom: 1px solid rgba(255, 255, 255, .12);
+}
+.mdui-theme-layout-dark .mdui-panel-item:last-child {
+  border-bottom: none;
+}
+.mdui-theme-layout-dark .mdui-panel-item-header:active {
+  background-color: #424242;
+}
+.mdui-theme-layout-dark .mdui-panel-item-summary {
+  color: rgba(255, 255, 255, .7);
+}
+.mdui-theme-layout-dark .mdui-panel-item-arrow {
+  color: #fff;
+}
+.mdui-theme-layout-dark .mdui-panel-item-actions {
+  border-top: 1px solid rgba(255, 255, 255, .12);
 }
 /**
  * =============================================================================
