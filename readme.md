@@ -1,16 +1,3 @@
----
-title: readme
-date: 2020-04-29 23:45
-author: zcmimi
-avatar: /img/avatar
-tags: 
-# - ***
-
-thumbnail: 
-comment: 1
-html:
----
-
 ## 简介
 
 本博客生成器基于`python`,使用若干`pip`包,兼容`hexo`,`jekyll`等博客生成器
