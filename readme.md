@@ -1,5 +1,7 @@
 ## 简介
 
+[demo](https://blog.zcmimi.top/)
+
 本博客生成器基于`python`,使用若干`pip`包,兼容`hexo`,`jekyll`等博客生成器
 
 使用`markdown`,支持`LaTeX`
